@@ -1,0 +1,95 @@
+{% extends './base.html' %}
+{% load static %}
+{% block body %}
+<!doctype html>
+<html lang="en">
+
+<body id="top">
+
+  <!-- HOME -->
+  <section class="section-hero overlay inner-page bg-image"
+    style="background-image: url('{% static 'images/hero_1.jpg' %}');" id="home-section">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-7">
+          <h1 class="text-white font-weight-bold">Apply Now</h1>
+          <div class="custom-breadcrumbs">
+            <a href="{% url 'app1:home' %}">Home</a> <span class="mx-2 slash">/</span>
+            <span class="text-white"><strong>Apply</strong></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="site-section" id="next-section">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-6 mb-5 mb-lg-0" style="margin-right: 100px;">
+          <form method="post" action="{% url 'app1:apply' pk=job.id %}" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <div class="row form-group">
+              <div class="col-md-6 mb-3 mb-md-0">
+                <label class="text-black" for="fname">First Name</label>
+                <input type="text" id="fname" class="form-control" name="first_name">
+              </div>
+              <div class="col-md-6">
+                <label class="text-black" for="lname">Last Name</label>
+                <input type="text" id="lname" class="form-control" name="last_name">
+              </div>
+            </div>
+
+            <div class="row form-group">
+
+              <div class="col-md-12">
+                <label class="text-black" for="email">Email</label>
+                <input type="email" id="email" class="form-control" name="email">
+              </div>
+            </div>
+
+            <div class="row form-group">
+
+              <div class="col-md-12">
+                <label for="company-website-tw d-block">Upload CV</label> <br>
+                <label class="btn btn-primary btn-md btn-file">
+                  Browse File<input type="file" hidden name="cv">
+                </label>
+              </div>
+            </div>
+
+            <div class="row form-group">
+              <div class="col-md-12">
+                <label class="text-black" for="message">Cover Letter</label>
+                <textarea name="message" id="message" cols="30" rows="7" class="form-control"
+                  placeholder="Write your  Qualifications for this job" name="cover_letter"></textarea>
+              </div>
+            </div>
+
+            <div class="row form-group">
+              <div class="col-md-12">
+                <input type="submit" value="Apply" class="btn btn-primary btn-md text-white">
+              </div>
+            </div>
+
+
+          </form>
+        </div>
+        <div class="col-lg-4">
+          <div class="bg-light p-3 border rounded mb-4">
+            <h3 class="text-primary  mt-3 h5 pl-3 mb-3 ">Job Summary</h3>
+            <ul class="list-unstyled pl-3 mb-0">
+              <li class="mb-2"><strong class="text-black">Title: </strong> {{job.title}}</li>
+              <li class="mb-2"><strong class="text-black">Company name:</strong> {{job.company_name}}</li>
+              <li class="mb-2"><strong class="text-black">Published on:</strong> {{job.published_on}}</li>
+              <li class="mb-2"><strong class="text-black">Job type:</strong> {{job.type}}</li>
+              <li class="mb-2"><strong class="text-black">Job Location:</strong> {{job.location}}</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+  </section>
+</body>
+
+</html>
+{% endblock body %}

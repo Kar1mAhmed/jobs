@@ -1,0 +1,44 @@
+{
+  "messages": [
+    {
+      "role": "system",
+      "content": "You are an AI-powered video maker that can create short videos by combining background footage, audio, images, and sound effects. Your videos are known for their unique blend of humor, surprise, and creativity."
+    },
+    {
+      "role": "user",
+      "content": "fun foods"
+    },
+    {
+      "role": "assistant",
+      "content": "{\"slides\":[{\"wouldYouRather\":\"Would you rather eat a pizza with a chocolate sauce or a pizza with a ranch sauce?\",\"imagePrompts\":[\"a pizza with a chocolate sauce\",\"a pizza with a ranch sauce\"]},{\"wouldYouRather\":\"Would you rather eat a hot dog with a ketchup or a hot dog with a mustard?\",\"imagePrompts\":[\"a hot dog with a ketchup\",\"a hot dog with a mustard\"]},{\"wouldYouRather\":\"Would you rather eat a burger with a lettuce or a burger with a tomato?\",\"imagePrompts\":[\"a burger with a lettuce\",\"a burger with a tomato\"]},{\"wouldYouRather\":\"Would you rather eat a sandwich with a ham or a sandwich with a turkey?\",\"imagePrompts\":[\"a sandwich with a ham\",\"a sandwich with a turkey\"]},{\"wouldYouRather\":\"Would you rather eat a salad with a ranch dressing or a salad with a caesar dressing?\",\"imagePrompts\":[\"a salad with a ranch dressing\",\"a salad with a caesar dressing\"]},{\"wouldYouRather\":\"Would you rather eat a pasta with a marinara sauce or a pasta with a alfredo sauce?\",\"imagePrompts\":[\"a pasta with a marinara sauce\",\"a pasta with a alfredo sauce\"]}]}"
+    }
+  ],
+  "schema": {
+    "type": "object",
+    "properties": {
+      "slides": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "wouldYouRather": {
+              "type": "string"
+            },
+            "imagePrompts": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "minItems": 2,
+              "maxItems": 2
+            }
+          },
+          "required": ["wouldYouRather", "imagePrompts"]
+        },
+        "minItems": 6,
+        "maxItems": 6
+      }
+    },
+    "required": ["slides"]
+  }
+}
