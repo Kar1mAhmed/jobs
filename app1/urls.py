@@ -27,5 +27,8 @@ urlpatterns = [
     path("edit-job-page/<int:pk>/", views.edit_job_page, name="edit_job_page"),
     path("delete-job/<int:pk>/", views.delete_job, name="delete_job"),
     path("edit-job/<int:pk>/", views.edit_job, name="edit_job"),
-
+    path('favorite/<int:pk>/', views.favorite, name='favorite'),
+    path('remove_favorite/<int:pk>/', views.remove_favorite, name='remove_favorite'),
+    path('favorite_page/', views.favorite_page, name='favorite_page')
+    
 ]

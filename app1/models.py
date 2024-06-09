@@ -7,6 +7,7 @@ class User(models.Model):
     name = models.CharField(max_length=255)
     email = models.EmailField(unique=True)
     password = models.CharField(max_length=100)
+    favorite_jobs = models.ManyToManyField('app1.Job', related_name='favorite_jobs')
 
 
 class Job(models.Model):

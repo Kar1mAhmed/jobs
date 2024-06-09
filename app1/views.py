@@ -7,14 +7,22 @@ from .models import User, Job, Application
 
 def home(request):
     user_id = request.session.get("user_id")
+    
     all_jobs = Job.objects.all()
+    all_applications = Application.objects.all()
+    all_users = User.objects.all()
 
-    context = {"jobs": all_jobs, "jobs_count": all_jobs.count()}
+    context = {
+        "jobs": all_jobs,
+        "jobs_count": all_jobs.count(),
+        "application_count": all_applications.count,
+        "user_count" : all_users.count(),
+    }
 
     if user_id:
         context["user_id"] = user_id
 
-    return render(request, "index.html", context)
+    return render(request, "home.html", context)
 
 
 def signup(request):
@@ -124,17 +132,22 @@ def job_details(request, pk):
     job = Job.objects.get(id=pk)
 
     user_id = request.session.get("user_id")
+
+    if not user_id:
+        return redirect("app1:login_page")
+
     current_user = User.objects.get(id=user_id)
 
     application = Application.objects.filter(job=job, user=current_user)
-    print(len(application))
 
     applied = False
 
     if len(application) > 0:
         applied = True
 
-    context = {"job": job, "applied": applied}
+    is_favorite = current_user.favorite_jobs.filter(id=pk).exists()
+
+    context = {"job": job, "applied": applied, "is_favorite": is_favorite}
     return render(request, "job-single.html", context)
 
 
@@ -197,6 +210,10 @@ def delete_application(request, pk):
 def posted_jobs(request):
 
     user_id = request.session.get("user_id")
+
+    if not user_id:
+        return redirect("app1:login_page")
+
     current_user = User.objects.get(id=user_id)
 
     posted_jobs = Job.objects.filter(user=current_user)
@@ -209,6 +226,10 @@ def posted_jobs(request):
 def applied_jobs(request):
 
     user_id = request.session.get("user_id")
+
+    if not user_id:
+        return redirect("app1:login_page")
+
     current_user = User.objects.get(id=user_id)
 
     applications = Application.objects.filter(user=current_user)
@@ -239,12 +260,56 @@ def edit_job(request, pk):
     form_company_name = request.POST.get("company_name", "")
     form_company_description = request.POST.get("company-description", "")
     form_logo = request.FILES.get("logo", "")
-    
-    
-    
+
+    job.email = form_email
+    job.title = form_title
+    job.location = form_location
+    job.type = form_type
+    job.description = form_job_description
+    job.company_name = form_company_name
+    job.company_description = form_company_description
+
+    if form_logo:
+        job.logo = form_logo
+
+    job.save()
+
+    return redirect("app1:posted_jobs")
 
 
 def delete_job(request, pk):
     job = Job.objects.get(id=pk)
     job.delete()
     return redirect("app1:posted_jobs")
+
+
+def favorite(request, pk):
+    job = Job.objects.get(id=pk)
+
+    user_id = request.session.get("user_id")
+    current_user = User.objects.get(id=user_id)
+
+    current_user.favorite_jobs.add(job)
+
+    return redirect("app1:favorite_page")
+
+
+def remove_favorite(request, pk):
+    job = Job.objects.get(id=pk)
+
+    user_id = request.session.get("user_id")
+    current_user = User.objects.get(id=user_id)
+
+    current_user.favorite_jobs.remove(job)
+
+    return redirect("app1:favorite_page")
+
+
+def favorite_page(request):
+    user_id = request.session.get("user_id")
+    current_user = User.objects.get(id=user_id)
+
+    favorite_jobs = current_user.favorite_jobs.all()
+
+    context = {"jobs": favorite_jobs}
+    return render(request, "favorite.html", context)
